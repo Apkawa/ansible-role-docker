@@ -1,0 +1,7 @@
+---
+
+- name: Accept from container to host
+  iptables:
+    chain: INPUT
+    in_interface: docker0
+    jump: ACCEPT

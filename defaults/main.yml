@@ -1,2 +1,33 @@
 ---
-# defaults file for ansible-role-borg
+docker_storage_driver: overlay2
+docker_config_file: "/etc/docker/daemon.json"
+docker_data_root: "/var/lib/docker"
+docker_config_dns:
+  - 8.8.8.8
+  - 8.8.4.4
+
+# Todo smart get version from available version
+docker_version: null
+
+docker_registry: []
+# docker_registry:
+#  - registry: registry.gitlab.com
+#    username: apkawa
+#    password: !vault |
+#      $ANSIBLE_VAULT;1.1;AES256
+
+
+# docker_compose
+docker_compose: yes
+docker_compose_bin: /usr/local/bin/docker-compose
+# https://github.com/docker/compose/releases
+docker_compose_version: 1.24.1
+docker_compose_checksum: "sha256:cfb3439956216b1248308141f7193776fcf4b9c9b49cbbe2fb07885678e2bb8a"
+docker_compose_release_url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+
+# ctop
+docker_ctop: no
+docker_ctop_bin: /usr/local/bin/ctop
+docker_ctop_version: 0.7.2
+docker_ctop_checksum: "sha256:e1af73e06f03caf0c59ac488c1cda97348871f6bb47772c31bbd314ddc494383"
+docker_ctop_release_url: "https://github.com/bcicen/ctop/releases/download/v/ctop-{{ docker_ctop_version }}-linux-amd64"

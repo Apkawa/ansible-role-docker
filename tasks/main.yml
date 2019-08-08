@@ -14,4 +14,29 @@
       paths:
         - 'tasks'
 
+- include: "firewall.yml"
 
+- name: "Ensures {{ docker_config_file|dirname }} dir exists"
+  file:
+    path: "{{ docker_config_file|dirname }}"
+    state: directory
+
+- name: Generate docker.json
+  template:
+    src: 'docker/daemon.json'
+    dest: "{{ docker_config_file }}"
+
+
+- name: Start docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+
+- include: install_docker_compose.yml
+  when: docker_compose
+- include: install_ctop.yml
+  when: docker_ctop
+
+- include: registry.yml

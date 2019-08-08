@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  role_name: rename me
-  author: your name
-  description: your description
+  role_name: docker
+  author: Apkawa
+  description: Ansible role for install docker-ce
   license: MIT
 
   min_ansible_version: 2.4
@@ -10,24 +10,20 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - 6
         - 7
     - name: Fedora
       versions:
         - all
     - name: Debian
       versions:
-        - jessie
         - stretch
         - buster
     - name: Ubuntu
       versions:
-        - trusty
-        - xenial
         - bionic
 
   galaxy_tags:
-    - cron
+    - docker
     - system
     - server
 

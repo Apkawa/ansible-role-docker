@@ -1,0 +1,10 @@
+---
+
+- name: Download and install standalone ctop
+  get_url:
+    url:  "{{ docker_ctop_release_url }}"
+    dest: "{{ docker_ctop_bin }}"
+    owner: root
+    group: root
+    mode: 755
+    checksum: "{{ docker_ctop_checksum }}"

@@ -14,3 +14,22 @@
         - "default.yml"
       paths:
         - 'vars'
+  when: docker_version is not defined or not docker_version
+
+- name: "docker-ce require before 18.09"
+  set_fact:
+    docker_packages:
+      - ["docker-ce", "{{ docker_version }}"]
+  when: docker_version is version('18.09', '<')
+
+- name: "docker-ce-cli require after 18.09"
+  set_fact:
+    docker_packages:
+      - ["docker-ce", "{{ docker_version }}"]
+      - ["docker-ce-cli", "{{ docker_version }}"]
+      - ["containerd.io"]
+  when: docker_version is version('18.09', '>=')
+
+
+
+

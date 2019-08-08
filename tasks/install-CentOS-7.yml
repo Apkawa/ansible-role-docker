@@ -1,0 +1,42 @@
+- name: Remove system docker
+  yum:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-client
+    - docker-client-latest
+    - docker-common
+    - docker-latest
+    - docker-latest-logrotate
+    - docker-logrotate
+    - docker-engine
+
+- name: Add docker repo
+  yum_repository:
+    name: Docker
+    description: Docker CE repository
+    baseurl:  https://download.docker.com/linux/centos/7/$basearch/stable
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    gpgcheck: yes
+    enabled: yes
+
+- name: install requirements
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: Install Docker-CE
+  yum:
+    name: "{{ item|join('-') }}"
+  loop: "{{ docker_packages }}"
+
+- name: Add DOCKER_OPTS
+  lineinfile:
+    path: /etc/sysconfig/docker
+    regexp: '^OPTIONS='
+    line: "OPTIONS=--config-file={{ docker_config_file }}"
+    create: yes

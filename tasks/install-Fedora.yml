@@ -1,0 +1,35 @@
+- name: Remove system docker
+  package:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-client
+    - docker-client-latest
+    - docker-common
+    - docker-latest
+    - docker-latest-logrotate
+    - docker-logrotate
+    - docker-engine
+    - docker-engine-selinux
+
+- name: Add docker repo
+  yum_repository:
+    name: Docker
+    description: Docker CE repository
+    baseurl:  https://download.docker.com/linux/fedora/$releasever/$basearch/stable
+    gpgkey: https://download.docker.com/linux/fedora/gpg
+    gpgcheck: yes
+    enabled: yes
+
+- name: Install Docker-CE
+  package:
+    name: "{{ item|join('-') }}"
+  loop: "{{ docker_packages }}"
+
+- name: Add DOCKER_OPTS
+  lineinfile:
+    path: /etc/sysconfig/docker
+    regexp: '^OPTIONS='
+    line: "OPTIONS=--config-file={{ docker_config_file }}"
+    create: yes

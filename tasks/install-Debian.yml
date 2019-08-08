@@ -1,0 +1,51 @@
+---
+
+- name: Install deps
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+
+- name: Remove old docker
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - docker
+    - docker-engine
+    - docker.io
+
+- name: Add specific key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Remove old repository
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo/ debian-{{ ansible_distribution_release }} main"
+    state: absent
+    filename: 'docker'
+
+- name: Add repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+    filename: 'docker'
+
+- name: Install docker
+  apt:
+    name: "{{ item|join('=') }}"
+    state: present
+  loop: "{{ docker_packages }}"
+
+- name: Add DOCKER_OPTS
+  lineinfile:
+    path: /etc/default/docker
+    regexp: '^DOCKER_OPTS='
+    line: 'DOCKER_OPTS="--config-file={{ docker_config_file }}"'
+    create: yes

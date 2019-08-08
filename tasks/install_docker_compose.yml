@@ -1,0 +1,11 @@
+---
+
+- name: Download and install standalone docker-compose
+  get_url:
+    url:  "{{ docker_compose_release_url }}"
+    dest: "{{ docker_compose_bin }}"
+    owner: root
+    group: root
+    mode: 755
+    checksum: "{{ docker_compose_checksum }}"
+
