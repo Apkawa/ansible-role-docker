@@ -2,9 +2,9 @@ Ansible role: docker
 ====================
 [![Build Status](https://travis-ci.org/apkawa/ansible-role-docker.svg?branch=master)](https://travis-ci.org/apkawa/ansible-role-docker)
 
-[![Ansible role](https://img.shields.io/ansible/role/%replace%.svg)](https://galaxy.ansible.com/apkawa/docker)
-[![Ansible role downloads](https://img.shields.io/ansible/role/d/%replace%.svg)](https://galaxy.ansible.com/apkawa/docker)
-[![Ansible role quality](https://img.shields.io/ansible/quality/%replace%.svg)](https://galaxy.ansible.com/apkawa/docker)
+[![Ansible role](https://img.shields.io/ansible/role/42615.svg)](https://galaxy.ansible.com/apkawa/docker)
+[![Ansible role downloads](https://img.shields.io/ansible/role/d/42615.svg)](https://galaxy.ansible.com/apkawa/docker)
+[![Ansible role quality](https://img.shields.io/ansible/quality/42615.svg)](https://galaxy.ansible.com/apkawa/docker)
 
 Ansible role for installation `docker`, `docker-compose` and optional `ctop`
 
