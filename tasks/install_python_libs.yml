@@ -1,8 +1,34 @@
-#
-- name: install python docker libs
+---
+# TODO apkawa.python
+- name: Install python package
+  package:
+    # TODO python3
+    name: python-setuptools
+    state: present
+
+- name: Add pip
+  easy_install:
+    name: pip
+
+- name: 'Remove docker-py '
+  sudo: true
   pip:
     name: "{{ item }}"
-    state: present
+    state: absent
   with_items:
-    - docker
-    - docker-compose
+    - docker-py
+
+- name: 'Install docker python package'
+  sudo: true
+  pip:
+    name: docker
+    version: "{{ docker_python_docker_version|default(omit) }}"
+    state: present
+
+- name: 'Install docker-compose package'
+  sudo: true
+  pip:
+    name: docker-compose
+    version: "{{ docker_python_docker_compose_version|default(omit) }}"
+    state: present
+
