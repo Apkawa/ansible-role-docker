@@ -1,4 +1,5 @@
 ---
+# TODO pip install docker
 - name: Login registry
   docker_login: "{{ item }}"
   with_items: "{{ docker_registry }}"

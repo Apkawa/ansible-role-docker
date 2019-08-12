@@ -33,6 +33,7 @@
     state: started
     enabled: yes
 
+- include: install_python_libs.yml
 
 - include: install_docker_compose.yml
   when: docker_compose

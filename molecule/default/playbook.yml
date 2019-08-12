@@ -3,6 +3,21 @@
   hosts: all
   vars:
     docker_storage_driver: vfs
-    docker_data_root: /opt/docker/
-  roles:
-    - role: ansible-role-docker
+    docker_daemon_opts:
+      data-root: /opt/docker/
+
+  tasks:
+    - name: test role
+      include_role:
+        name: ansible-role-docker
+
+    - name: test
+      docker_service:
+        project_name: test
+        state: present
+        definition:
+          version: "3"
+          services:
+            test:
+              image: busybox
+

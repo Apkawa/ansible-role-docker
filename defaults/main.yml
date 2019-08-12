@@ -9,6 +9,15 @@ docker_config_dns:
 # Todo smart get version from available version
 docker_version: null
 
+# https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
+docker_daemon_default_opts:
+  dns: "{{ docker_config_dns }}"
+  data-root: "{{ docker_data_root }}"
+  storage-driver: "{{ docker_storage_driver }}"
+
+docker_daemon_opts: {}
+
+
 docker_registry: []
 # docker_registry:
 #  - registry: registry.gitlab.com

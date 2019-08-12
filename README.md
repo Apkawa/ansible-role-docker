@@ -25,6 +25,19 @@ docker_config_dns:
   - 8.8.8.8
   - 8.8.4.4
 
+# https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
+# Overrides in daemon.json format
+docker_daemon_opts:
+  data-root: /opt/docker/
+  label:
+    - foo=bar
+    - key=value
+  dns: 
+      - 8.8.8.8
+      - 8.8.4.4
+    
+
+
 # Debian/Ubuntu: apt-cache madison docker-ce  
 # CentOS/Fedora: yum list docker-ce --showduplicates | sort -r
 # By default - fill from variable by avtodetection OS
