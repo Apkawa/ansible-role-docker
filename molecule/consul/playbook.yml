@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    docker_storage_driver: vfs
+    docker_daemon_opts:
+      data-root: /opt/docker/
+
+  tasks:
+    - name: test role
+      include_role:
+        name: ansible-role-docker

@@ -1,0 +1,40 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  enabled: yes
+platforms:
+  - name: instance-swarm-master
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: yes
+    pre_build_image: true
+
+  - name: instance-swarm-worker
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: yes
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      instance-swarm-worker:
+        test_host_var: worker
+      instance-swarm-master:
+        test_host_var: master
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

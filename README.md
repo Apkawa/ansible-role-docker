@@ -67,6 +67,32 @@ docker_ctop_checksum: "sha256:e1af73e06f03caf0c59ac488c1cda97348871f6bb47772c31b
 docker_ctop_release_url: "https://github.com/bcicen/ctop/releases/download/v/ctop-{{ docker_ctop_version }}-linux-amd64"
 ```
 
+### Consul
+
+For enable consul
+
+```yaml
+# Experimental!
+# Consul
+
+docker_consul_enabled: yes
+# Node with consul store. Must be one
+docker_consul_store: yes
+docker_consul_store_url:
+
+# per host var
+docker_cluster_advertise: "{{ ansible_default_ipv4.interface }}:2377"
+docker_cluster_hosts:
+  - "tcp://0.0.0.0:2375"
+  - "unix:///var/run/docker.sock"
+```
+
+TODO operate with multiple consul stores
+
+Useful links 
+
+* https://luppeng.wordpress.com/2016/05/03/setting-up-an-overlay-network-on-docker-without-swarm/
+* https://hub.docker.com/r/progrium/consul/
 
 Dependencies
 ------------

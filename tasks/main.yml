@@ -21,19 +21,38 @@
     path: "{{ docker_config_file|dirname }}"
     state: directory
 
+- include: install_python_libs.yml
+
+
+
+- include: consul/collect_facts.yml
+  when: docker_consul_enabled is defined and docker_consul_enabled
+
 - name: Generate docker.json
   template:
     src: 'docker/daemon.json'
     dest: "{{ docker_config_file }}"
-
+  register: docker_daemon_file
 
 - name: Start docker
   service:
     name: docker
     state: started
     enabled: yes
+  register: docker_service_started
 
-- include: install_python_libs.yml
+- name: Reload docker
+  service:
+    name: docker
+    state: restarted
+    enabled: yes
+  changed_when: docker_daemon_file.changed and not docker_service_started.changed
+
+- include: consul/main.yml
+  when: docker_consul_enabled is defined and docker_consul_enabled
+
+- include: swarm/main.yml
+  when: docker_swarm_enabled is defined and docker_swarm_enabled
 
 - include: install_docker_compose.yml
   when: docker_compose
@@ -42,8 +61,3 @@
 
 - include: registry.yml
 
-- include: swarm/main.yml
-  when: docker_swarm_enabled is defined and docker_swarm_enabled
-
-- include: consul/main.yml
-  when: docker_consul_enabled is defined and docker_consul_enabled

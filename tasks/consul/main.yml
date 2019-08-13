@@ -1,0 +1,17 @@
+---
+
+- name: Start consul storage
+  docker_container:
+    image: progrium/consul
+    name: consul-store
+    hostname: consul
+    command:  -server -bootstrap
+    restart_policy: always
+    ports:
+      - 8500:8500 # ui
+      - 8400:8400 # rpc
+      - 8600:53/udp # dns
+    state: started
+  when: docker_consul_store is defined and docker_consul_store
+
+- debug: var=docker_daemon_default_opts

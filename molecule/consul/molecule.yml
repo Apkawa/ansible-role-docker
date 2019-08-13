@@ -1,0 +1,49 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  enabled: yes
+platforms:
+  - name: instance-consul-master
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: yes
+    exposed_ports:
+      - 8500/tcp # consul-store
+      - 2375/tcp # docker host
+      - 2377/tcp # cluster-advertise
+    pre_build_image: true
+
+  - name: instance-consul-worker
+    image: geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    exposed_ports:
+      - 2375/tcp # docker host
+      - 2377/tcp # cluster-advertise
+    privileged: yes
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  inventory:
+    host_vars:
+      instance-consul-worker:
+        docker_consul_enabled: yes
+        docker_consul_store: no
+      instance-consul-master:
+        docker_consul_enabled: yes
+        docker_consul_store: yes
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

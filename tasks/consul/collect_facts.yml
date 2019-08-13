@@ -1,4 +1,5 @@
 ---
+
 - name: find consul store
   set_fact:
     consul_store: "{{ item.value }}"
@@ -8,31 +9,16 @@
 
 - name: consul
   set_fact:
-    docker_consul_store_host: "{{ _store_reg.results | map(attribute='ansible_facts.consul_store')|select('defined')|list|first }}"
+    docker_consul_store_host: "{{ _store_reg.results | map(attribute='ansible_facts.consul_store')| select('defined') | list | first }}"
 
-- name: get master host
+- name: docker cluster daemon opts
   set_fact:
-    docker_swarm_master_host: "{{ docker_swarm_master_hosts|first }}"
+    docker_consul_daemon_opts:
+      hosts: "{{ docker_cluster_hosts }}"
+      cluster-advertise: "{{ docker_cluster_advertise }}"
+      cluster-store: "{{ docker_consul_store_url|default('consul://{}:8500'.format(docker_consul_store_host.ansible_default_ipv4.address), true) }}"
 
-- name: Get swarm join tokens
+
+- name: Update daemon docker opts
   set_fact:
-    docker_swarm_join_tokens: "{{ docker_swarm_master_host.docker_swarm_master_facts.swarm_facts.JoinTokens }}"
-
-
-- name: Collect manager hosts
-  set_fact:
-    swarm_manager: "{{ item.value }}"
-  with_dict: "{{ hostvars }}"
-  when: (item.value.docker_swarm_manager  is defined and item.value.docker_swarm_manager)
-        or (item.value.docker_swarm_master is defined and item.value.docker_swarm_master)
-
-  register: swarm_manager_reg
-
-- name: collect manager hosts
-  set_fact:
-    docker_swarm_manager_hosts: "{{ swarm_manager_reg.results | map(attribute='ansible_facts.swarm_manager')| select('defined') | list }}"
-
-
-- name: collect manager remotes
-  set_fact:
-    docker_swarm_remote_addr_list: "{{ docker_swarm_manager_hosts | map(attribute='docker_swarm_remote_addr')| select('defined') | list }}"
+    docker_daemon_default_opts: "{{ docker_daemon_default_opts|combine(docker_consul_daemon_opts) }}"

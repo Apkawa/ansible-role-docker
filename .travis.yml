@@ -23,6 +23,9 @@ env:
     # check ansible version on debian10
     - TOX_ENV=ansible24-debian10
     - TOX_ENV=ansible28-debian10
+    # check cluster consul
+    - TOX_ENV=centos7-consul
+    - TOX_ENV=debian10-consul
 
 install:
   - pip install pipenv tox-travis
