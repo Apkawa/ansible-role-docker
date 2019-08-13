@@ -1,0 +1,33 @@
+---
+
+- name: Init swarm master
+  docker_swarm:
+    state: present
+    listen_addr: "{{ docker_swarm_listen_addr }}"
+    advertise_addr: "{{ docker_swarm_advertise_addr }}"
+  when: docker_swarm_master
+  register: docker_swarm_master_facts
+
+
+- include: collect_facts.yml
+
+- name: Add node manager
+  docker_swarm:
+    state: join
+    listen_addr: "{{ docker_swarm_listen_addr }}"
+    advertise_addr: "{{ docker_swarm_advertise_addr }}"
+    remote_addrs: "{{ docker_swarm_remote_addr_list }}"
+    join_token: "{{ docker_swarm_join_tokens.Manager }}"
+  when: docker_swarm_manager
+
+
+- name: Add node worker
+  docker_swarm:
+    state: join
+    listen_addr: "{{ docker_swarm_listen_addr }}"
+    advertise_addr: "{{ docker_swarm_advertise_addr }}"
+    remote_addrs: "{{ docker_swarm_remote_addr_list }}"
+    join_token: "{{ docker_swarm_join_tokens.Worker }}"
+  when: docker_swarm_worker
+
+

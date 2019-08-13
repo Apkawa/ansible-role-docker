@@ -9,6 +9,7 @@ docker_config_dns:
 # Todo smart get version from available version
 docker_version: null
 
+
 # https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
 docker_daemon_default_opts:
   dns: "{{ docker_config_dns }}"
@@ -43,3 +44,27 @@ docker_ctop_bin: /usr/local/bin/ctop
 docker_ctop_version: 0.7.2
 docker_ctop_checksum: "sha256:e1af73e06f03caf0c59ac488c1cda97348871f6bb47772c31bbd314ddc494383"
 docker_ctop_release_url: "https://github.com/bcicen/ctop/releases/download/v/ctop-{{ docker_ctop_version }}-linux-amd64"
+
+# Swarm
+
+docker_swarm_enabled: no
+
+# Host vars
+docker_swarm_master: no
+docker_swarm_manager: no
+docker_swarm_worker: no
+
+docker_swarm_listen_addr: '0.0.0.0:2377'
+docker_swarm_advertise_addr: "{{ ansible_default_ipv4.interface }}"
+docker_swarm_remote_addr: "{{ ansible_default_ipv4.address }}:2377"
+
+# Consul
+# https://luppeng.wordpress.com/2016/05/03/setting-up-an-overlay-network-on-docker-without-swarm/
+
+docker_consul_enabled: no
+# Node on consul store
+docker_consul_store: no
+docker_cluster_advertise: "{{ ansible_default_ipv4.address }}:2377"
+docker_cluster_hosts:
+  - "tcp://0.0.0.0:2375"
+  - "unix:///var/run/docker.sock"

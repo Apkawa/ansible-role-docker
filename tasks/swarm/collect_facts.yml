@@ -1,0 +1,44 @@
+---
+- name: set facts
+  set_fact:
+    docker_swarm_advertise_addr: "{{ docker_swarm_advertise_addr }}"
+    docker_swarm_remote_addr: "{{ docker_swarm_remote_addr }}"
+
+- name: find swarm masters hosts
+  set_fact:
+    swarm_master: "{{ item.value }}"
+  with_dict: "{{ hostvars }}"
+  when: item.value.docker_swarm_master is defined and item.value.docker_swarm_master
+  register: swarm_master_reg
+
+- name: collect master hosts
+  set_fact:
+    docker_swarm_master_hosts: "{{ swarm_master_reg.results | map(attribute='ansible_facts.swarm_master')|select('defined')|list }}"
+
+
+- name: get master host
+  set_fact:
+    docker_swarm_master_host: "{{ docker_swarm_master_hosts|first }}"
+
+- name: Get swarm join tokens
+  set_fact:
+    docker_swarm_join_tokens: "{{ docker_swarm_master_host.docker_swarm_master_facts.swarm_facts.JoinTokens }}"
+
+
+- name: Collect manager hosts
+  set_fact:
+    swarm_manager: "{{ item.value }}"
+  with_dict: "{{ hostvars }}"
+  when: (item.value.docker_swarm_manager  is defined and item.value.docker_swarm_manager)
+        or (item.value.docker_swarm_master is defined and item.value.docker_swarm_master)
+
+  register: swarm_manager_reg
+
+- name: collect manager hosts
+  set_fact:
+    docker_swarm_manager_hosts: "{{ swarm_manager_reg.results | map(attribute='ansible_facts.swarm_manager')| select('defined') | list }}"
+
+
+- name: collect manager remotes
+  set_fact:
+    docker_swarm_remote_addr_list: "{{ docker_swarm_manager_hosts | map(attribute='docker_swarm_remote_addr')| select('defined') | list }}"
