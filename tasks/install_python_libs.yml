@@ -11,24 +11,16 @@
     name: pip
 
 - name: 'Remove docker-py '
-  sudo: true
   pip:
     name: "{{ item }}"
     state: absent
   with_items:
     - docker-py
 
+
 - name: 'Install docker python package'
-  sudo: true
   pip:
-    name: docker
-    version: "{{ docker_python_docker_version|default(omit) }}"
+    name:
+      - "docker{{ docker_python_docker_version|default('') }}"
+      - "docker-compose{{ docker_python_docker_compose_version|default('') }}"
     state: present
-
-- name: 'Install docker-compose package'
-  sudo: true
-  pip:
-    name: docker-compose
-    version: "{{ docker_python_docker_compose_version|default(omit) }}"
-    state: present
-

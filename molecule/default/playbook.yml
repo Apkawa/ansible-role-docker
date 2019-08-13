@@ -10,14 +10,3 @@
     - name: test role
       include_role:
         name: ansible-role-docker
-
-    - name: test
-      docker_service:
-        project_name: test
-        state: present
-        definition:
-          version: "3"
-          services:
-            test:
-              image: busybox
-
