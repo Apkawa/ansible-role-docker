@@ -1,3 +1,4 @@
+# flake8: noqa
 import json
 import os
 
@@ -32,6 +33,7 @@ def test_network_overlay():
     master.run('docker rm -f container_master')
     worker.run('docker rm -f container_worker')
     master.run('docker network rm test_overlay_master test_overlay_worker')
+    worker.run('docker network rm test_overlay_master test_overlay_worker')
     assert master.run(
         'docker network create -d overlay test_overlay_master').rc == 0
     assert worker.run(
@@ -50,7 +52,6 @@ def test_network_overlay():
 
 def test_daemon_json(host):
     f = host.file('/etc/docker/daemon.json')
-
     assert f.exists
     assert f.user == 'root'
     assert f.group == 'root'

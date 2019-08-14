@@ -11,4 +11,3 @@
 #    - name: test role
 #      include_role:
 #        name: ansible-role-docker
-

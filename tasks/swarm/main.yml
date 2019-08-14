@@ -29,5 +29,3 @@
     remote_addrs: "{{ docker_swarm_remote_addr_list }}"
     join_token: "{{ docker_swarm_join_tokens.Worker }}"
   when: docker_swarm_worker
-
-

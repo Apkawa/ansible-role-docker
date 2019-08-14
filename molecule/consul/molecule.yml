@@ -14,9 +14,12 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: yes
     exposed_ports:
-      - 8500/tcp # consul-store
-      - 2375/tcp # docker host
-      - 2377/tcp # cluster-advertise
+      # consul-store
+      - 8500/tcp
+      # docker host
+      - 2375/tcp
+      # cluster-advertise
+      - 2377/tcp
     pre_build_image: true
 
   - name: instance-consul-worker
@@ -25,8 +28,10 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     exposed_ports:
-      - 2375/tcp # docker host
-      - 2377/tcp # cluster-advertise
+      # docker host
+      - 2375/tcp
+      # cluster-advertise
+      - 2377/tcp
     privileged: yes
     pre_build_image: true
 

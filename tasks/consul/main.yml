@@ -5,12 +5,15 @@
     image: progrium/consul
     name: consul-store
     hostname: consul
-    command:  -server -bootstrap
+    command: -server -bootstrap
     restart_policy: always
     ports:
-      - 8500:8500 # ui
-      - 8400:8400 # rpc
-      - 8600:53/udp # dns
+      # ui
+      - 8500:8500
+      # rpc
+      - 8400:8400
+      # dns
+      - 8600:53/udp
     state: started
   when: docker_consul_store is defined and docker_consul_store
 

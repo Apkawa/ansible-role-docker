@@ -23,8 +23,6 @@
 
 - include: install_python_libs.yml
 
-
-
 - include: consul/collect_facts.yml
   when: docker_consul_enabled is defined and docker_consul_enabled
 
@@ -41,7 +39,7 @@
     enabled: yes
   register: docker_service_started
 
-- name: Reload docker
+- name: Restart docker
   service:
     name: docker
     state: restarted
@@ -60,4 +58,3 @@
   when: docker_ctop
 
 - include: registry.yml
-
