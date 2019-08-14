@@ -1,18 +1,13 @@
 ---
-- name: Vars
-  include: vars.yml
+- include: vars.yml
 
-- name:
-  include: "{{ lookup('first_found', params) }}"
+- include: dist_include.yml
   vars:
-    params:
-      files:
-        - "install-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-        - "install-{{ ansible_distribution }}.yml"
-        - "install-{{ ansible_os_family }}.yml"
-        - "install.yml"
-      paths:
-        - 'tasks'
+    include_file: install.yml
+
+- include: dist_include.yml
+  vars:
+    include_file: install_python_libs.yml
 
 - include: "firewall.yml"
 
@@ -21,7 +16,6 @@
     path: "{{ docker_config_file|dirname }}"
     state: directory
 
-- include: install_python_libs.yml
 
 - include: consul/collect_facts.yml
   when: docker_consul_enabled is defined and docker_consul_enabled
