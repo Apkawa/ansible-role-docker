@@ -32,5 +32,8 @@ def test_daemon_json(host):
             "8.8.4.4"
         ],
         "storage-driver": "vfs",
-        "data-root": "/opt/docker/"
+        "data-root": "/opt/docker/",
+        'hosts': [
+            'unix:///var/run/docker.sock'
+        ]
     }
