@@ -104,8 +104,8 @@ docker_consul_agent: no
 # Optional
 # ethernet device or ip. by default - "{{ host.ansible_default_ipv4.address }}"
 docker_consul_bind: null # eth0 | 10.0.1.5
-# by default - ip server with ui. 
-docker_consul_store_address: null
+# by default - consul agent every nodes
+docker_consul_store_address: localhost
 
 # Version tag from https://hub.docker.com/_/consul?tab=tags
 docker_consul_version: 1.5

@@ -15,6 +15,8 @@ docker_daemon_default_opts:
   dns: "{{ docker_config_dns }}"
   data-root: "{{ docker_data_root }}"
   storage-driver: "{{ docker_storage_driver }}"
+  hosts:
+    - "unix:///var/run/docker.sock"
 
 docker_daemon_opts: {}
 
@@ -71,7 +73,7 @@ docker_consul_agent: no
 # Optional
 # ethernet device or ip. by default
 docker_consul_bind: null
-docker_consul_store_address: null
+docker_consul_store_address: localhost
 # Version tag from https://hub.docker.com/_/consul?tab=tags
 docker_consul_version: 1.5
 
