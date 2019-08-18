@@ -39,8 +39,12 @@ def test_daemon_json(host):
             "8.8.4.4"
         ],
         "storage-driver": "vfs",
-        "data-root": "/opt/docker/"
+        "data-root": "/opt/docker/",
+        'hosts': [
+            'unix:///var/run/docker.sock'
+        ]
     }
+
 
 def test_swarm_nodes():
     cmd = master.run('docker node ls')
@@ -60,7 +64,8 @@ def test_swarm_nodes():
 
 def test_swarm_deploy():
     master.run("docker service rm test_swarm").rc
-    assert master.run('docker service create --name test_swarm --replicas=2 busybox ping ya.ru').rc == 0
+    assert master.run(
+        'docker service create --name test_swarm --replicas=2 busybox ping ya.ru').rc == 0
 
     cmd = master.run("docker service ps test_swarm")
     assert cmd.rc == 0
@@ -68,5 +73,3 @@ def test_swarm_deploy():
     assert 'instance-swarm-worker' in cmd.stdout
 
     assert master.run("docker service rm test_swarm").rc == 0
-
-

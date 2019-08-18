@@ -49,3 +49,16 @@
     regexp: '^DOCKER_OPTS='
     line: 'DOCKER_OPTS="--config-file={{ docker_config_file }}"'
     create: yes
+
+- name: "Remove -H fd://"
+  lineinfile:
+    path: /lib/systemd/system/docker.service
+    regexp: '^(ExecStart=.*?)-H fd://(.*)$'
+    line: '\1 \2'
+    backrefs: yes
+  register: docker_update_service
+
+- name: Update systemd
+  systemd:
+    daemon_reload: yes
+  changed_when: docker_update_service.changed
