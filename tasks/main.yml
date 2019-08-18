@@ -1,6 +1,12 @@
 ---
 - include: vars.yml
 
+- debug: msg="can't combine swarm and consul"
+  failed_when:
+    - docker_consul_enabled is defined and docker_consul_enabled
+    - docker_swarm_enabled is defined and docker_swarm_enabled
+
+
 - include: dist_include.yml
   vars:
     include_file: install.yml
@@ -25,6 +31,7 @@
     src: 'docker/daemon.json'
     dest: "{{ docker_config_file }}"
   register: docker_daemon_file
+  notify: Restart docker
 
 - name: Start docker
   service:
@@ -32,13 +39,6 @@
     state: started
     enabled: yes
   register: docker_service_started
-
-- name: Restart docker
-  service:
-    name: docker
-    state: restarted
-    enabled: yes
-  changed_when: docker_daemon_file.changed and not docker_service_started.changed
 
 - include: consul/main.yml
   when: docker_consul_enabled is defined and docker_consul_enabled

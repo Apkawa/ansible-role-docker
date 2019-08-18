@@ -1,23 +1,37 @@
 ---
 
+- name: Get consul bind address
+  set_fact:
+    docker_consul_bind_address: >-
+      {%- set addr=ansible_default_ipv4.address -%}
+      {%- if docker_consul_bind -%}
+        {%- set addr=vars['ansible_' + docker_consul_bind].address|default(docker_consul_bind) -%}
+      {%- endif -%}
+      {{ addr }}
+
+
 - name: find consul store
   set_fact:
     consul_store: "{{ item.value }}"
   with_dict: "{{ hostvars }}"
-  when: item.value.docker_consul_store is defined and item.value.docker_consul_store
+  when: item.value.docker_consul_server_ui is defined and item.value.docker_consul_server_ui
   register: _store_reg
 
-- name: consul
+- name: Consul server ui host
   set_fact:
     docker_consul_store_host: "{{ _store_reg.results | map(attribute='ansible_facts.consul_store')| select('defined') | list | first }}"
+
+
+- name: Consul join address
+  set_fact:
+    docker_consul_join_addr: "{{ docker_consul_join_addr|default(docker_consul_store_host.docker_consul_bind_address) }}"
 
 - name: docker cluster daemon opts
   set_fact:
     docker_consul_daemon_opts:
       hosts: "{{ docker_cluster_hosts }}"
       cluster-advertise: "{{ docker_cluster_advertise }}"
-      cluster-store: "{{ docker_consul_store_url|default('consul://{}:8500'.format(docker_consul_store_host.ansible_default_ipv4.address), true) }}"
-
+      cluster-store: "consul://{{ docker_consul_store_address|default(docker_consul_join_addr, True) }}:8500"
 
 - name: Update daemon docker opts
   set_fact:

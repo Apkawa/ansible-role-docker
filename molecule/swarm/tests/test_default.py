@@ -1,10 +1,17 @@
+# flake8: noqa
 import json
 import os
 
 import testinfra.utils.ansible_runner
 
-testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
-    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
+RUNNER = testinfra.utils.ansible_runner.AnsibleRunner(
+    os.environ['MOLECULE_INVENTORY_FILE'])
+
+testinfra_hosts = RUNNER.get_hosts('all')
+
+worker = RUNNER.get_host('instance-swarm-worker')
+
+master = RUNNER.get_host('instance-swarm-master')
 
 
 def test_docker_info(host):
@@ -34,3 +41,32 @@ def test_daemon_json(host):
         "storage-driver": "vfs",
         "data-root": "/opt/docker/"
     }
+
+def test_swarm_nodes():
+    cmd = master.run('docker node ls')
+    assert cmd.rc == 0
+    assert "instance-swarm-master" in cmd.stdout
+    assert "instance-swarm-worker" in cmd.stdout
+
+    cmd = master.run('docker node inspect instance-swarm-master')
+    assert cmd.rc == 0
+    assert json.loads(cmd.stdout)[0]['ManagerStatus']['Leader']
+    assert json.loads(cmd.stdout)[0]['Status']['State'] == 'ready'
+
+    cmd = master.run('docker node inspect instance-swarm-worker')
+    assert cmd.rc == 0
+    assert json.loads(cmd.stdout)[0]['Status']['State'] == 'ready'
+
+
+def test_swarm_deploy():
+    master.run("docker service rm test_swarm").rc
+    assert master.run('docker service create --name test_swarm --replicas=2 busybox ping ya.ru').rc == 0
+
+    cmd = master.run("docker service ps test_swarm")
+    assert cmd.rc == 0
+    assert 'instance-swarm-master' in cmd.stdout
+    assert 'instance-swarm-worker' in cmd.stdout
+
+    assert master.run("docker service rm test_swarm").rc == 0
+
+

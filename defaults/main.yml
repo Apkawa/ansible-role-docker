@@ -64,12 +64,19 @@ docker_swarm_remote_addr: "{{ ansible_default_ipv4.address }}:2377"
 # https://luppeng.wordpress.com/2016/05/03/setting-up-an-overlay-network-on-docker-without-swarm/
 
 docker_consul_enabled: no
-# Node on consul store. Must be one
-docker_consul_store: no
-docker_consul_store_url:
+# Node with consul store
+docker_consul_server_ui: no
+docker_consul_server: no
+docker_consul_agent: no
+# Optional
+# ethernet device or ip. by default
+docker_consul_bind: null
+docker_consul_store_address: null
+# Version tag from https://hub.docker.com/_/consul?tab=tags
+docker_consul_version: 1.5
 
 # per host var
 docker_cluster_advertise: "{{ ansible_default_ipv4.interface }}:2377"
 docker_cluster_hosts:
-  - "tcp://0.0.0.0:2375"
+  - "tcp://0.0.0.0:2377"
   - "unix:///var/run/docker.sock"

@@ -67,9 +67,30 @@ docker_ctop_checksum: "sha256:e1af73e06f03caf0c59ac488c1cda97348871f6bb47772c31b
 docker_ctop_release_url: "https://github.com/bcicen/ctop/releases/download/v/ctop-{{ docker_ctop_version }}-linux-amd64"
 ```
 
+### Swarm mode
+
+```yaml
+docker_swarm_enabled: yes
+
+# Host variables
+# Must be one!
+docker_swarm_master: no
+# Host with manager
+docker_swarm_manager: no
+# Host swarm worker
+docker_swarm_worker: no
+
+# Optional
+docker_swarm_listen_addr: '0.0.0.0:2377'
+docker_swarm_advertise_addr: "{{ ansible_default_ipv4.interface }}"
+docker_swarm_remote_addr: "{{ ansible_default_ipv4.address }}:2377"
+```
+
+https://docs.docker.com/engine/swarm/
+
 ### Consul
 
-For enable consul
+For enable consul cluster store without swarm
 
 ```yaml
 # Experimental!
@@ -77,22 +98,25 @@ For enable consul
 
 docker_consul_enabled: yes
 # Node with consul store. Must be one
-docker_consul_store: yes
-docker_consul_store_url:
+docker_consul_server_ui: no
+docker_consul_server: no
+docker_consul_agent: no
+# Optional
+# ethernet device or ip. by default - "{{ host.ansible_default_ipv4.address }}"
+docker_consul_bind: null # eth0 | 10.0.1.5
+# by default - ip server with ui. 
+docker_consul_store_address: null
 
-# per host var
-docker_cluster_advertise: "{{ ansible_default_ipv4.interface }}:2377"
-docker_cluster_hosts:
-  - "tcp://0.0.0.0:2375"
-  - "unix:///var/run/docker.sock"
+# Version tag from https://hub.docker.com/_/consul?tab=tags
+docker_consul_version: 1.5
 ```
 
-TODO operate with multiple consul stores
 
 Useful links 
 
+* https://www.consul.io/
 * https://luppeng.wordpress.com/2016/05/03/setting-up-an-overlay-network-on-docker-without-swarm/
-* https://hub.docker.com/r/progrium/consul/
+* https://hub.docker.com/r/_/consul/
 
 Dependencies
 ------------
@@ -106,7 +130,6 @@ Example Playbook
 - hosts: all
   roles:
     - role: apkawa.docker
-
 ```
 
 License

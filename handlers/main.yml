@@ -1,2 +1,6 @@
 ---
-# handlers file for ansible-role-borg
+- name: Restart docker
+  service:
+    name: docker
+    state: restarted
+    enabled: yes

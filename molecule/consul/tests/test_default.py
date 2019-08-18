@@ -67,7 +67,7 @@ def test_daemon_json(host):
         "storage-driver": "vfs",
         "data-root": "/opt/docker/",
         "hosts": [
-            "tcp://0.0.0.0:2375",
+            "tcp://0.0.0.0:2377",
             "unix:///var/run/docker.sock"
         ],
         "cluster-advertise": "eth0:2377",

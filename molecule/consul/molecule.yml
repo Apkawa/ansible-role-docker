@@ -44,10 +44,12 @@ provisioner:
     host_vars:
       instance-consul-worker:
         docker_consul_enabled: yes
-        docker_consul_store: no
+        docker_consul_agent: yes
       instance-consul-master:
         docker_consul_enabled: yes
-        docker_consul_store: yes
+        docker_consul_server: no
+        docker_consul_server_ui: yes
+
 verifier:
   name: testinfra
   lint:

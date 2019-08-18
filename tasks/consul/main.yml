@@ -1,20 +1,87 @@
 ---
 
-- name: Start consul storage
+- name: Start consul agent
   docker_container:
-    image: progrium/consul
-    name: consul-store
-    hostname: consul
-    command: -server -bootstrap
+    image: consul:1.5
+    name: consul-agent
+    command: >-
+      agent
+      -retry-join {{ docker_consul_join_addr }}
+      -advertise {{ docker_consul_bind_address }}
+      -client 0.0.0.0
+      -recursor=8.8.8.8
+    ports:
+      # ui/HTTP Api
+      - 8500:8500
+      # Used for RPC communication from the commandline tools.
+      - 8400:8400
+      # Gossip protocol between agents and servers.
+      - 8301:8301
+      - 8301:8301/udp
+      # dns
+      - "53:8600"
+      - "53:8600/udp"
+    restart_policy: always
+    state: started
+  when: docker_consul_agent is defined and docker_consul_agent
+
+- name: Start consul server
+  docker_container:
+    image: consul:1.5
+    name: consul-server
+    command: >-
+      agent -server
+      -retry-join {{ docker_consul_join_addr }}
+      -advertise {{ docker_consul_bind_address }}
+      -client 0.0.0.0
+      -recursor=8.8.8.8
+    ports:
+      # HTTP Api
+      - 8500:8500
+      # Used for RPC communication from the commandline tools.
+      - 8400:8400
+      # server: Server RPC address (TCP Only)
+      - 8300:8300
+      # Gossip protocol between agents and servers.
+      - 8301:8301
+      - 8301:8301/udp
+      # Gossip protocol between Consul servers
+      - 8302:8302
+      - 8302:8302/udp
+      # dns
+      - "53:8600"
+      - "53:8600/udp"
+    restart_policy: always
+    state: started
+  when: docker_consul_server is defined and docker_consul_server
+
+- name: Start consul server with ui
+  docker_container:
+    image: consul:1.5
+    name: consul-server-ui
+    command: >-
+      agent -server -bootstrap -ui
+      -advertise {{ docker_consul_bind_address }}
+      -client 0.0.0.0
+      -recursor=8.8.8.8
     restart_policy: always
     ports:
-      # ui
+      # HTTP Api and UI
       - 8500:8500
-      # rpc
+      # Used for RPC communication from the commandline tools.
       - 8400:8400
+      # server: Server RPC address (TCP Only)
+      - 8300:8300
+      # Gossip protocol between agents and servers.
+      - 8301:8301
+      - 8301:8301/udp
+      # Gossip protocol between Consul servers
+      - 8302:8302
+      - 8302:8302/udp
       # dns
-      - 8600:53/udp
+      - "53:8600"
+      - "53:8600/udp"
     state: started
-  when: docker_consul_store is defined and docker_consul_store
+  when: docker_consul_server_ui is defined and docker_consul_server_ui
 
 - debug: var=docker_daemon_default_opts

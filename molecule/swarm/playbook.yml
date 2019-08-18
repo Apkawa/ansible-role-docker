@@ -6,8 +6,8 @@
     docker_daemon_opts:
       data-root: /opt/docker/
 
+
   tasks:
-    - debug: var=test_host_var
-#    - name: test role
-#      include_role:
-#        name: ansible-role-docker
+    - name: test role
+      include_role:
+        name: ansible-role-docker

@@ -26,6 +26,9 @@ env:
     # check cluster consul
     - TOX_ENV=centos7-consul
     - TOX_ENV=debian10-consul
+    # check swarm
+    - TOX_ENV=centos7-swarm
+    - TOX_ENV=debian10-swarm
 
 install:
   - pip install pipenv tox-travis

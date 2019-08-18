@@ -31,9 +31,11 @@ provisioner:
   inventory:
     host_vars:
       instance-swarm-worker:
-        test_host_var: worker
+        docker_swarm_enabled: yes
+        docker_swarm_worker: yes
       instance-swarm-master:
-        test_host_var: master
+        docker_swarm_enabled: yes
+        docker_swarm_master: yes
 verifier:
   name: testinfra
   lint:
