@@ -5,12 +5,13 @@
     docker_consul_bind_address: >-
       {%- set addr=ansible_default_ipv4.address -%}
       {%- if docker_consul_bind -%}
-        {%- set addr=vars['ansible_' + docker_consul_bind].address|default(docker_consul_bind) -%}
+        {%- set addr=vars['ansible_' + docker_consul_bind].ipv4.address|default(docker_consul_bind) -%}
       {%- endif -%}
       {{ addr }}
 
 
 - name: find consul store
+  no_log: yes
   set_fact:
     consul_store: "{{ item.value }}"
   with_dict: "{{ hostvars }}"
@@ -18,6 +19,7 @@
   register: _store_reg
 
 - name: Consul server ui host
+  no_log: yes
   set_fact:
     docker_consul_store_host: "{{ _store_reg.results | map(attribute='ansible_facts.consul_store')| select('defined') | list | first }}"
 

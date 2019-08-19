@@ -5,6 +5,7 @@
     docker_swarm_remote_addr: "{{ docker_swarm_remote_addr }}"
 
 - name: find swarm masters hosts
+  no_log: yes
   set_fact:
     swarm_master: "{{ item.value }}"
   with_dict: "{{ hostvars }}"
@@ -12,11 +13,13 @@
   register: swarm_master_reg
 
 - name: collect master hosts
+  no_log: yes
   set_fact:
     docker_swarm_master_hosts: "{{ swarm_master_reg.results | map(attribute='ansible_facts.swarm_master')|select('defined')|list }}"
 
 
 - name: get master host
+  no_log: yes
   set_fact:
     docker_swarm_master_host: "{{ docker_swarm_master_hosts|first }}"
 
@@ -26,6 +29,7 @@
 
 
 - name: Collect manager hosts
+  no_log: yes
   set_fact:
     swarm_manager: "{{ item.value }}"
   with_dict: "{{ hostvars }}"
@@ -35,6 +39,7 @@
   register: swarm_manager_reg
 
 - name: collect manager hosts
+  no_log: yes
   set_fact:
     docker_swarm_manager_hosts: "{{ swarm_manager_reg.results | map(attribute='ansible_facts.swarm_manager')| select('defined') | list }}"
 

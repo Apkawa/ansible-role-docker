@@ -45,6 +45,7 @@ provisioner:
       instance-consul-worker:
         docker_consul_enabled: yes
         docker_consul_agent: yes
+        docker_consul_bind: "{{ ansible_default_ipv4.interface }}"
       instance-consul-master:
         docker_consul_enabled: yes
         docker_consul_server: no
