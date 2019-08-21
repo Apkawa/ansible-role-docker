@@ -30,6 +30,11 @@ env:
     - TOX_ENV=centos7-swarm
     - TOX_ENV=debian10-swarm
 
+matrix:
+  fast_finish: true
+  allow_failures:
+    - python: "2.7"
+
 install:
   - pip install pipenv tox-travis
   - pipenv install --dev

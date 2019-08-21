@@ -34,7 +34,7 @@
       -retry-join {{ docker_consul_join_addr }}
       -advertise {{ docker_consul_bind_address }}
       -client 0.0.0.0
-      -recursor=8.8.8.8
+      {% for addr in docker_config_dns %} -recursor={{ addr }} {% endfor %}
     ports:
       # HTTP Api
       - 8500:8500
