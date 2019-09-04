@@ -9,6 +9,9 @@ docker_config_dns:
 # Todo smart get version from available version
 docker_version: null
 
+# TODO Add user to group docker
+docker_group_users: []
+
 
 # https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
 docker_daemon_default_opts:
@@ -82,3 +85,5 @@ docker_cluster_advertise: "{{ ansible_default_ipv4.interface }}:2377"
 docker_cluster_hosts:
   - "tcp://0.0.0.0:2377"
   - "unix:///var/run/docker.sock"
+
+docker_interface_ip: "{{ ansible_docker0.ipv4.address | default('172.17.0.1') }}"

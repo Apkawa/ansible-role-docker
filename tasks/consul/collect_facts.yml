@@ -34,7 +34,10 @@
       hosts: "{{ docker_cluster_hosts }}"
       cluster-advertise: "{{ docker_cluster_advertise }}"
       cluster-store: "consul://{{ docker_consul_store_address|default(docker_consul_join_addr, True) }}:8500"
-      dns: ["{{ ansible_docker0 }}.ipv4.address"]
+      dns: [
+        "{{ docker_interface_ip }}",
+        "8.8.8.8",
+      ]
 
 - name: Update daemon docker opts
   set_fact:

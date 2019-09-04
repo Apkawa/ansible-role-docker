@@ -61,8 +61,8 @@ def test_daemon_json(host):
     del config['cluster-store']
     assert config == {
         "dns": [
+            "172.18.0.1",
             "8.8.8.8",
-            "8.8.4.4"
         ],
         "storage-driver": "vfs",
         "data-root": "/opt/docker/",

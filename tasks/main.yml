@@ -40,6 +40,7 @@
     enabled: yes
   register: docker_service_started
 
+
 - include: consul/main.yml
   when: docker_consul_enabled is defined and docker_consul_enabled
 

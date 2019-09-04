@@ -2,6 +2,7 @@
 - name: Converge
   hosts: all
   vars:
+    docker_interface_ip: 172.18.0.1
     docker_storage_driver: vfs
     docker_daemon_opts:
       data-root: /opt/docker/
