@@ -33,6 +33,7 @@ env:
 matrix:
   fast_finish: true
 
+install: pip install tox tox-travis
 script:
   - tox -e $TOX_ENV
 
