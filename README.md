@@ -147,14 +147,10 @@ Contributing
 ------------
 
 1. [Install docker](https://docs.docker.com/install/linux/docker-ce/debian/)
-2. [Install pipenv](https://docs.pipenv.org/en/latest/install/#installing-pipenv)
-3. Initialize pipenv:
-    ```
-    pipenv install --dev
-    ```
-4. Run tests
+2. [Install tox](https://tox.readthedocs.io/en/latest/install.html)
+2. Run tests
     ``` 
-    pipenv run -- tox -e centos7
+    tox -e centos7
     ```
    
 ###  Low level run part of test

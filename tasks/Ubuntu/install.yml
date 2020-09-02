@@ -49,6 +49,7 @@
     regexp: '^DOCKER_OPTS='
     line: 'DOCKER_OPTS="--config-file={{ docker_config_file }}"'
     create: yes
+    mode: 0644
 
 - name: "Remove -H fd://"
   lineinfile:

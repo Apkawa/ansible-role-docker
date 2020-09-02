@@ -41,3 +41,4 @@
     regexp: '^OPTIONS='
     line: "OPTIONS=--config-file={{ docker_config_file }}"
     create: yes
+    mode: 0644
