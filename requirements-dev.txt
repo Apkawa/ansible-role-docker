@@ -1,3 +1,4 @@
 tox==3.7.0
-molecule>=2,<3
-molecule[docker]
+molecule==2.22
+docker>=2.0.0
+
